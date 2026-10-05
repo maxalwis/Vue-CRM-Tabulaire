@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 COMPOSE := docker compose
 
-.PHONY: help up down build restart logs ps db db-down psql clean install dev-backend dev-frontend seed test
+.PHONY: help up down build restart logs ps db db-down psql clean install dev-backend dev-frontend seed seed-local test
 
 help: ## Liste les commandes disponibles
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -48,6 +48,9 @@ dev-frontend: ## Lance le frontend Vite
 
 seed: ## Remplit la base avec des contacts fictifs (service backend requis)
 	$(COMPOSE) exec backend npm run seed
+
+seed-local: ## Remplit la base depuis votre machine (nécessite make db)
+	cd backend && npm run seed
 
 test: ## Lance les tests du backend
 	cd backend && npm test
