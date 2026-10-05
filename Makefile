@@ -1,13 +1,19 @@
 .DEFAULT_GOAL := help
 COMPOSE := docker compose
 
-.PHONY: help up down build restart logs ps db db-down psql clean install dev-backend dev-frontend seed seed-local test
+.PHONY: help check-env up down build restart logs ps db db-down psql clean install dev-backend dev-frontend seed
 
 help: ## Liste les commandes disponibles
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-14s %s\n", $$1, $$2}'
 
-up: ## Lance toute l'application (build + démarrage)
-	$(COMPOSE) up --build -d
+check-env:
+	@test -f .env || { \
+		echo "Erreur : .env introuvable. Lance : cp .env.example .env"; \
+		exit 1; \
+	}
+
+up: check-env
+	docker compose up --build
 
 down: ## Arrête les conteneurs (les données sont conservées)
 	$(COMPOSE) down
@@ -48,9 +54,3 @@ dev-frontend: ## Lance le frontend Vite
 
 seed: ## Remplit la base avec des contacts fictifs (service backend requis)
 	$(COMPOSE) exec backend npm run seed:prod
-
-seed-local: ## Remplit la base depuis votre machine (nécessite make db)
-	cd backend && npm run seed
-
-test: ## Lance les tests du backend
-	cd backend && npm test

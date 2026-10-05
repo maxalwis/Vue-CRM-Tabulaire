@@ -183,13 +183,13 @@ export function buildListQuery(
   const dir = params.sortDir === 'desc' ? 'DESC' : 'ASC';
   let sortExpr = '"id"';
   let sortCast = 'int';
-  if (params.sortBy) {
-    const col = byId.get(params.sortBy);
-    if (!col) throw new BadRequestException('Unknown sort column');
-    const cell = `NULLIF("values" ->> ${args.add(col.id)}::text, '')`;
-    sortCast = SQL_CAST[col.type];
-    sortExpr = sortCast === 'text' ? `lower(${cell})` : `(${cell})::${sortCast}`;
-  }
+ if (params.sortBy && params.sortBy !== 'id') {
+  const col = byId.get(params.sortBy);
+  if (!col) throw new BadRequestException('Unknown sort column');
+  const cell = `NULLIF("values" ->> ${args.add(col.id)}::text, '')`;
+  sortCast = SQL_CAST[col.type];
+  sortExpr = sortCast === 'text' ? `lower(${cell})` : `(${cell})::${sortCast}`;
+}
 
   // 3. Curseur keyset : (valeur de tri, id) avec NULL en dernier
   if (params.cursor) {

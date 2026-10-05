@@ -1,5 +1,14 @@
 import { Type } from 'class-transformer';
-import { IsIn, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import {
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  Min,
+  ValidateIf,
+} from 'class-validator';
 
 export class ListContactsDto {
   @IsOptional()
@@ -9,7 +18,9 @@ export class ListContactsDto {
   @Max(200)
   limit: number = 50;
 
+  // "id" = tri sur la colonne native "#", sinon UUID d'une colonne dynamique
   @IsOptional()
+  @ValidateIf((o) => o.sortBy !== 'id')
   @IsUUID()
   sortBy?: string;
 
