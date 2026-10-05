@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ColumnsModule } from './columns/columns.module';
+import { ContactsModule } from './contacts/contacts.module';
 
 @Module({
   imports: [
@@ -20,8 +22,10 @@ import { AppService } from './app.service';
         migrations: [__dirname + '/migrations/*{.ts,.js}'],
         migrationsRun: true,
         synchronize: false,
-      }),
-    }),
+		}),
+	}),
+	ColumnsModule,
+	ContactsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

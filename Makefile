@@ -25,13 +25,13 @@ ps: ## Affiche l'état des services
 	$(COMPOSE) ps
 
 db: ## Lance uniquement PostgreSQL (pour le développement local)
-	$(COMPOSE) up -d db
+	$(COMPOSE) up -d postgres
 
 db-down: ## Arrête uniquement PostgreSQL
-	$(COMPOSE) stop db
+	$(COMPOSE) stop postgres
 
 psql: ## Ouvre un shell psql dans la base
-	$(COMPOSE) exec db psql -U crm -d crm
+	$(COMPOSE) exec postgres psql -U crm -d crm
 
 clean: ## Arrête tout ET supprime les volumes (efface la base)
 	$(COMPOSE) down -v --remove-orphans
@@ -47,7 +47,7 @@ dev-frontend: ## Lance le frontend Vite
 	cd frontend && npm run dev
 
 seed: ## Remplit la base avec des contacts fictifs (service backend requis)
-	$(COMPOSE) exec backend npm run seed
+	$(COMPOSE) exec backend npm run seed:prod
 
 seed-local: ## Remplit la base depuis votre machine (nécessite make db)
 	cd backend && npm run seed

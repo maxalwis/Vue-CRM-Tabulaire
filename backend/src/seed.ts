@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import { ColumnEntity, ColumnType } from './columns/column.entity';
 import { Contact } from './contacts/contact.entity';
 
-const CONTACT_COUNT = Number(process.env.SEED_COUNT ?? 1000);
+const CONTACT_COUNT = Number(process.env.SEED_COUNT ?? 600);
 const BATCH_SIZE = 500;
 
 const DEFAULT_COLUMNS: { name: string; type: ColumnType }[] = [
